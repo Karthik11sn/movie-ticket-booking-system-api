@@ -1,4 +1,7 @@
 package com.example.movie.entity;
 
-public class User {
+import jakarta.persistence.Entity;
+
+@Entity
+public class User extends UserDetails{
 }
