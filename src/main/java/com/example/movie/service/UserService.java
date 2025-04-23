@@ -1,7 +1,9 @@
 package com.example.movie.service;
 
-import com.example.movie.entity.UserDetails;
+import com.example.movie.dto.UserRegistrationRequestDto;
+import com.example.movie.dto.UserResponse;
+
 
 public interface UserService {
-    public UserDetails addUser(UserDetails user);
+    UserResponse addUser(UserRegistrationRequestDto user);
 }
