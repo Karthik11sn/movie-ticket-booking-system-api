@@ -4,6 +4,10 @@ import com.example.movie.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
@@ -11,19 +15,25 @@ import java.time.LocalDate;
 @Entity
 @Setter
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
     private String username;
+
     @Column(unique = true)
     private String email;
     private String password;
     private String phoneNumber;
+
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
     private LocalDate dateOfBirth;
+
+    @CreatedDate
     private long createdAt;
+    @LastModifiedDate
     private long updateAt;
 }
