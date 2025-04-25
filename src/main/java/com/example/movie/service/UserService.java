@@ -8,4 +8,6 @@ import com.example.movie.dto.UserUpdationRequest;
 public interface UserService {
     UserResponse addUser(UserRegistrationRequestDto user);
     UserResponse editUser(UserUpdationRequest userRequest, String email);
+    UserResponse softDeleteUser(String email);
+
 }
