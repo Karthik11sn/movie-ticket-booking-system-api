@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -32,6 +33,9 @@ public class UserDetails {
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
     private LocalDate dateOfBirth;
+    private boolean isDelete;
+    private Instant deletedAt;
+
 
     @CreatedDate
     private long createdAt;

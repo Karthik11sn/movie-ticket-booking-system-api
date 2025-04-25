@@ -10,10 +10,7 @@ import com.example.movie.util.RestResponseBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -33,4 +30,12 @@ public class UserController {
         UserResponse userDetails=userService.editUser(user,email);
         return responseBuilder.sucess(HttpStatus.OK,"User details has been updated",userDetails);
     }
-}
+
+
+    @DeleteMapping("/users/{email}")
+    public ResponseEntity<ResponseStructure<UserResponse>> softDeleteUser(@PathVariable String email) {
+        UserResponse userDetails = userService.softDeleteUser (email);
+        return responseBuilder.sucess(HttpStatus.OK, "User  account has been deleted", userDetails);
+    }
+    }
+
