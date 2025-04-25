@@ -1,6 +1,7 @@
 package com.example.movie.exceptions.handler;
 
 import com.example.movie.exceptions.UserExistByEmailException;
+import com.example.movie.exceptions.UserNotFoundByEmailException;
 import com.example.movie.util.ErrorStructure;
 import com.example.movie.util.RestResponseBuilder;
 import lombok.AllArgsConstructor;
@@ -17,5 +18,10 @@ public class UserExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorStructure> handleUserExistByEmailException(UserExistByEmailException ex){
         return responseBuilder.error(HttpStatus.OK, ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorStructure> handleUserNotFoundByEmailException(UserNotFoundByEmailException ex){
+        return responseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }
