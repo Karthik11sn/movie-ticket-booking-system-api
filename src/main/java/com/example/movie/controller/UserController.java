@@ -7,7 +7,9 @@ import com.example.movie.entity.UserDetails;
 import com.example.movie.service.UserService;
 import com.example.movie.util.ResponseStructure;
 import com.example.movie.util.RestResponseBuilder;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +22,13 @@ public class UserController {
     private final RestResponseBuilder responseBuilder;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseStructure<UserResponse>> addUser(@RequestBody UserRegistrationRequestDto user){
+    public ResponseEntity<ResponseStructure<UserResponse>> addUser(@RequestBody @Valid UserRegistrationRequestDto user){
         UserResponse userDetails=userService.addUser(user);
         return responseBuilder.sucess(HttpStatus.OK,"New User details has been added",userDetails);
     }
 
-    @PostMapping("/users/{email}")
-    public ResponseEntity<ResponseStructure<UserResponse>> editUser(@PathVariable String email, @RequestBody UserUpdationRequest user){
+    @PutMapping ("/users/{email}")
+    public ResponseEntity<ResponseStructure<UserResponse>> editUser(@PathVariable String email, @RequestBody  @Valid UserUpdationRequest user){
         UserResponse userDetails=userService.editUser(user,email);
         return responseBuilder.sucess(HttpStatus.OK,"User details has been updated",userDetails);
     }
