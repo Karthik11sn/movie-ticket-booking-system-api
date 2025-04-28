@@ -6,6 +6,7 @@ import com.example.movie.entity.Theater;
 import com.example.movie.entity.TheaterOwner;
 import com.example.movie.entity.UserDetails;
 import com.example.movie.enums.UserRole;
+import com.example.movie.exceptions.TheaterNotFoundByIdException;
 import com.example.movie.exceptions.UserNotFoundByEmailException;
 import com.example.movie.mapper.TheaterMapper;
 import com.example.movie.repository.TheaterRepository;
@@ -30,6 +31,16 @@ public class TheaterServiceImpl implements TheaterService {
         }
         throw new UserNotFoundByEmailException("No Theater Owner with the provided email is present");
     }
+
+    @Override
+    public TheaterResponse findTheater(String theaterId) {
+        if(theaterRepository.existsById(theaterId)){
+            Theater theater = theaterRepository.findById(theaterId).get();
+            return theaterMapper.theaterResponseMapper(theater);
+        }
+        throw new TheaterNotFoundByIdException("Theater not found by the id");
+    }
+
     private Theater copy(TheaterRegisterationRequest registerationRequest, Theater theater , UserDetails userDetails){
         theater.setAddress(registerationRequest.address());
         theater.setCity(registerationRequest.city());
