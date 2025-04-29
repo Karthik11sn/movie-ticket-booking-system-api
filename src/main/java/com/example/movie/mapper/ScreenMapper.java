@@ -13,7 +13,8 @@ public class ScreenMapper {
                 screen.getScreenId(),
                 screen.getScreenType(),
                 screen.getCapacity(),
-                screen.getNoOfRows()
+                screen.getNoOfRows(),
+                screen.getSeats()
 
         );
     }

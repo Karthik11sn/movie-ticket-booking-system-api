@@ -14,42 +14,42 @@ import com.example.movie.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
- private final UserRepository userRepository;
- private final UserDetailsMapper userMapper;
+    private final UserRepository userRepository;
+    private final UserDetailsMapper userMapper;
+
 
     @Override
     public UserResponse addUser(UserRegistrationRequestDto user) {
-        if (!userRepository.existsByEmail(user.email()))
-            throw new UserExistByEmailException("user with the Email is alredy exists");
-        //return copy(user);
+        if (userRepository.existsByEmail(user.email()))
+            throw new UserExistByEmailException("User with the Email is already exists");
+
         UserDetails userDetails = switch (user.userRole()) {
             case USER -> copy(new User(), user);
             case THEATER_OWNER -> copy(new TheaterOwner(), user);
-
         };
         return userMapper.userDetailsResponseMapper(userDetails);
-
     }
 
     @Override
     public UserResponse editUser(UserUpdationRequest userRequest, String email) {
-        if (userRepository.existsByEmail(email)){
+        if (userRepository.existsByEmail(email)) {
             UserDetails user = userRepository.findByEmail(email);
 
-            if( userRepository.existsByEmail(userRequest.email()))
+            if (!user.getEmail().equals(userRequest.email()) && userRepository.existsByEmail(userRequest.email())) {
                 throw new UserExistByEmailException("User with the email already exists");
+            }
+
 
             user = copy(user, userRequest);
 
             return userMapper.userDetailsResponseMapper(user);
         }
-
         throw new UserNotFoundByEmailException("Email not found in the Database");
     }
 
@@ -58,37 +58,32 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(email)) {
             UserDetails user = userRepository.findByEmail(email);
             user.setDelete(true);
-            user.setDeletedAt(Instant.now());
+            user.setDeletedAt(LocalDateTime.now());
             userRepository.save(user);
             return userMapper.userDetailsResponseMapper(user);
         }
         throw new UserNotFoundByEmailException("Email not found in the Database");
     }
 
-
-    private UserDetails copy(UserDetails userRole,UserRegistrationRequestDto user){
-        //Userdeatials userRole =user.getUserRole()==UserRole.USER? new user()
+    private UserDetails copy(UserDetails userRole, UserRegistrationRequestDto user) {
         userRole.setUserRole(user.userRole());
-        userRole.setEmail(user.email());
         userRole.setPassword(user.password());
-
+        userRole.setEmail(user.email());
         userRole.setDateOfBirth(user.dateOfBirth());
         userRole.setPhoneNumber(user.phoneNumber());
         userRole.setUsername(user.username());
+        userRole.setDelete(false);
         userRepository.save(userRole);
         return userRole;
-
     }
-    private UserDetails copy(UserDetails userRole,UserUpdationRequest user){
+
+    private UserDetails copy(UserDetails userRole, UserUpdationRequest user) {
         userRole.setDateOfBirth(user.dateOfBirth());
         userRole.setPhoneNumber(user.phoneNumber());
         userRole.setEmail(user.email());
         userRole.setUsername(user.username());
+        userRole.setDelete(false);
         userRepository.save(userRole);
         return userRole;
     }
-
-
-
 }
-

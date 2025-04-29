@@ -1,6 +1,7 @@
 package com.example.movie.entity;
 
 import com.example.movie.enums.ScreenType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import jakarta.persistence.Id;
@@ -21,15 +22,18 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Seat {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String seatId;
 
-    @ManyToOne
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Screen screen;
 
     @CreatedDate
     private LocalDateTime createdAt;
-
 
 }
