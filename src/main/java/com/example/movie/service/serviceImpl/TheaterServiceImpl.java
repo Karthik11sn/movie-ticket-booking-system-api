@@ -23,10 +23,10 @@ public class TheaterServiceImpl implements TheaterService {
     private final UserRepository userRepository;
 
     @Override
-    public TheaterResponse addTheater(String email, TheaterRequest theaterRegisterationRequest) {
+    public TheaterResponse addTheater(String email, TheaterRequest theaterRequest) {
         if(userRepository.existsByEmail(email) && userRepository.findByEmail(email).getUserRole() == UserRole.THEATER_OWNER ){
             UserDetails user = userRepository.findByEmail(email);
-            Theater theater = copy(theaterRegisterationRequest, new Theater(), user);
+            Theater theater = copy(theaterRequest, new Theater(), user);
             return theaterMapper.theaterResponseMapper(theater);
         }
         throw new UserNotFoundByEmailException("No Theater Owner with the provided email is present");
