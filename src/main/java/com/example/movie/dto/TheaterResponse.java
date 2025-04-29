@@ -1,4 +1,5 @@
 package com.example.movie.dto;
+import java.util.List;
 
 import lombok.Builder;
 

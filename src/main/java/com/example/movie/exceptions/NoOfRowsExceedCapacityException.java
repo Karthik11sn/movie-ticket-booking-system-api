@@ -1,0 +1,13 @@
+package com.example.movie.exceptions;
+
+import lombok.Getter;
+
+@Getter
+public class NoOfRowsExceedCapacityException extends RuntimeException {
+
+  private String message;
+
+    public NoOfRowsExceedCapacityException(String message) {
+        super(message);
+    }
+}
