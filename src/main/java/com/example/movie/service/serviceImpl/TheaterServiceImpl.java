@@ -1,6 +1,6 @@
 package com.example.movie.service.serviceImpl;
 
-import com.example.movie.dto.TheaterRegisterationRequest;
+import com.example.movie.dto.TheaterRequest;
 import com.example.movie.dto.TheaterResponse;
 import com.example.movie.entity.Theater;
 import com.example.movie.entity.TheaterOwner;
@@ -23,7 +23,7 @@ public class TheaterServiceImpl implements TheaterService {
     private final UserRepository userRepository;
 
     @Override
-    public TheaterResponse addTheater(String email, TheaterRegisterationRequest theaterRegisterationRequest) {
+    public TheaterResponse addTheater(String email, TheaterRequest theaterRegisterationRequest) {
         if(userRepository.existsByEmail(email) && userRepository.findByEmail(email).getUserRole() == UserRole.THEATER_OWNER ){
             UserDetails user = userRepository.findByEmail(email);
             Theater theater = copy(theaterRegisterationRequest, new Theater(), user);
@@ -41,12 +41,30 @@ public class TheaterServiceImpl implements TheaterService {
         throw new TheaterNotFoundByIdException("Theater not found by the id");
     }
 
-    private Theater copy(TheaterRegisterationRequest registerationRequest, Theater theater , UserDetails userDetails){
+    @Override
+    public TheaterResponse updateTheater(String theaterId, TheaterRequest registerationRequest) {
+        if(theaterRepository.existsById(theaterId)) {
+            Theater theater = theaterRepository.findById(theaterId).get();
+            theater = copy(registerationRequest, theater);
+            return theaterMapper.theaterResponseMapper(theater);
+        }
+        throw new TheaterNotFoundByIdException("Theater not found by id");
+    }
+
+    private Theater copy(TheaterRequest registerationRequest, Theater theater , UserDetails userDetails){
         theater.setAddress(registerationRequest.address());
         theater.setCity(registerationRequest.city());
         theater.setName(registerationRequest.name());
         theater.setLandmark(registerationRequest.landmark());
         theater.setTheaterOwner((TheaterOwner) userDetails);
+        theaterRepository.save(theater);
+        return theater;
+    }
+    private Theater copy(TheaterRequest registerationRequest, Theater theater) {
+        theater.setAddress(registerationRequest.address());
+        theater.setCity(registerationRequest.city());
+        theater.setName(registerationRequest.name());
+        theater.setLandmark(registerationRequest.landmark());
         theaterRepository.save(theater);
         return theater;
     }
