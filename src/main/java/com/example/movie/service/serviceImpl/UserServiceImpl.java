@@ -12,6 +12,7 @@ import com.example.movie.mapper.UserDetailsMapper;
 import com.example.movie.repository.UserRepository;
 import com.example.movie.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserDetailsMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -41,7 +43,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(email)) {
             UserDetails user = userRepository.findByEmail(email);
 
-            if (!user.getEmail().equals(userRequest.email()) && userRepository.existsByEmail(userRequest.email())) {
+            if (! user.getEmail().equals(userRequest.email()) && userRepository.existsByEmail(userRequest.email())){
                 throw new UserExistByEmailException("User with the email already exists");
             }
 
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService {
 
             return userMapper.userDetailsResponseMapper(user);
         }
+
         throw new UserNotFoundByEmailException("Email not found in the Database");
     }
 
@@ -67,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     private UserDetails copy(UserDetails userRole, UserRegistrationRequestDto user) {
         userRole.setUserRole(user.userRole());
-        userRole.setPassword(user.password());
+        userRole.setPassword(passwordEncoder.encode(user.password()));
         userRole.setEmail(user.email());
         userRole.setDateOfBirth(user.dateOfBirth());
         userRole.setPhoneNumber(user.phoneNumber());

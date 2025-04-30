@@ -23,6 +23,7 @@ import java.util.List;
 public class Seat {
 
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String seatId;
@@ -39,5 +40,6 @@ public class Seat {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
 
 }

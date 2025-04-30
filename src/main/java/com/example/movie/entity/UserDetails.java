@@ -25,21 +25,19 @@ public class UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
     private String username;
-
     @Column(unique = true)
     private String email;
     private String password;
     private String phoneNumber;
-
     @Enumerated(value = EnumType.STRING)
     private UserRole userRole;
     private LocalDate dateOfBirth;
     private boolean isDelete;
     private LocalDateTime deletedAt;
 
-
     @CreatedDate
-    private long createdAt;
+    private LocalDateTime createdAt;
     @LastModifiedDate
-    private long updateAt;
+    private LocalDateTime updatedAt;
+
 }
