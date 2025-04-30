@@ -42,8 +42,8 @@ public class ScreenServiceImpl implements ScreenService {
 
     @Override
     public ScreenResponse findScreen(String theaterId, String screenId) {
-        if(theaterRepository.existsById(theaterId)){
-            if(screenRepository.existsById(screenId)){
+        if (theaterRepository.existsById(theaterId)) {
+            if (screenRepository.existsById(screenId)) {
                 return screenMapper.screenResponseMapper(screenRepository.findById(screenId).get());
             }
             throw new ScreenNotFoundByIdException("Screen Not Found by Id");
@@ -63,13 +63,14 @@ public class ScreenServiceImpl implements ScreenService {
         return screen;
     }
 
-    private List<Seat> createSeats (Screen screen, Integer capacity){
+    private List<Seat> createSeats(Screen screen, Integer capacity){
         List<Seat> seats = new LinkedList<>();
         int noOfSeatsPerRow = screen.getCapacity() / screen.getNoOfRows();
         char row = 'A';
         for (int i = 1, j = 1; i <= capacity; i++, j++) {
             Seat seat = new Seat();
             seat.setScreen(screen);
+            seat.setIsDelete(false);
             seat.setName(row + "" + j);
             seatRepository.save(seat);
             seats.add(seat);
