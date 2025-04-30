@@ -17,7 +17,6 @@ public class ScreenController {
     private final ScreenService screenService;
     private final RestResponseBuilder responseBuilder;
 
-
     @PostMapping("theaters/{theaterId}/screens")
     public ResponseEntity<ResponseStructure<ScreenResponse>> addScreen(@RequestBody @Valid ScreenRequest screenRequest, @PathVariable String theaterId){
         ScreenResponse screenResponse = screenService.addScreen(screenRequest, theaterId);
@@ -29,4 +28,5 @@ public class ScreenController {
         ScreenResponse screenResponse = screenService.findScreen(theaterId, screenId);
         return responseBuilder.sucess(HttpStatus.OK, "Screen has been successfully fetched", screenResponse);
     }
+
 }
